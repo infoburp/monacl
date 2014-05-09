@@ -94,7 +94,7 @@ int main()
         //if more fit, overwrite leader dna
         if (renderDNA(mutatedDNA) > leaderDNAscore) 
         {
-        leaderDNA = mutatedDNA;
+        //leaderDNA = mutatedDNA;
         // copy data back to the host
         compute::copy(
             device_vector.begin(),
