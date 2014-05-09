@@ -10,6 +10,7 @@
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>
+
 namespace compute = boost::compute;
 
 int main()
@@ -31,13 +32,11 @@ int main()
 
     //initialise variables
     const size_t n = 1024 * 1024;
-    vex::Context ctx( vex::Filter::Any );
-    vex::vector<double> leaderDNA(ctx, n);
-    vex::vector<double> mutatedDNA(ctx, n);
-    vex::vector<double> leaderDNArender(ctx, n);
-    vex::vector<double> mutatedDNArender(ctx, n);
-    vex::vector<double> originalimage(ctx, n);
-
+    std::vector<double> leaderDNA(ctx, n);
+    std::vector<double> mutatedDNA(ctx, n);
+    std::vector<double> leaderDNArender(ctx, n);
+    std::vector<double> mutatedDNArender(ctx, n);
+    std::vector<double> originalimage(ctx, n);
 
     //load image into gpu memory
     // copy data to the device
@@ -47,8 +46,6 @@ int main()
         device_vector.begin(),
         queue
     );
-
-    
 
     //render dna
     //for each shape in dna
