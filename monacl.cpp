@@ -30,13 +30,11 @@ int main()
     compute::vector<float> device_vector(1000000, ctx);
 
     //initialise variables
-    const size_t n = 1024 * 1024;
-    vex::Context ctx( vex::Filter::Any );
-    vex::vector<double> leaderDNA(ctx, n);
-    vex::vector<double> mutatedDNA(ctx, n);
-    vex::vector<double> leaderDNArender(ctx, n);
-    vex::vector<double> mutatedDNArender(ctx, n);
-    vex::vector<double> originalimage(ctx, n);
+    //initialise leaderDNA
+    //initialise mutatedDNA
+    //initialise leaderDNArender
+    //initialise mutatedDNArender
+    //initialise originalimage
 
 
     //load image into gpu memory
