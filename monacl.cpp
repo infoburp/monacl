@@ -71,32 +71,31 @@ int main()
     boost::compute::transform(vector.begin(), vector.end(), vector.begin(), renderDNA);
 
     //mutate leader dna
-     boost::compute::function<int (int)> mutateDNA =
+    boost::compute::function<int (int)> mutateDNA =
     boost::compute::make_function_from_source<int (int)>(
         "mutateDNA",
         "int mutateDNA(int x) { return x + 4; }"
     );
 
     //render mutated dna
-     boost::compute::function<int (int)> renderDNA =
+    boost::compute::function<int (int)> renderDNA =
     boost::compute::make_function_from_source<int (int)>(
         "renderDNA",
         "int renderDNA(int x) { return x + 4; }"
     );
 
     //compare mutated dna to leader dna
-     boost::compute::function<int (int)> compareDNA =
+    boost::compute::function<int (int)> compareDNA =
     boost::compute::make_function_from_source<int (int)>(
         "compareDNA",
         "int compareDNA(int x) { return x + 4; }"
     );
 
     //if more fit, overwrite leader dna
-
     if (renderDNA(mutatedDNA) > leaderDNAscore) 
     {
-    leaderDNA = mutatedDNA;
-     // copy data back to the host
+    //leaderDNA = mutatedDNA;
+    // copy data back to the host
     compute::copy(
         device_vector.begin(),
         device_vector.end(),
