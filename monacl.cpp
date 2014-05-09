@@ -29,13 +29,6 @@ int main()
     // create vector on the device
     compute::vector<float> device_vector(1000000, ctx);
 
-    //initialise variables
-    //initialise mutatedDNA
-    //initialise leaderDNArender
-    //initialise mutatedDNArender
-    //initialise originalimage
-
-
     //load image into gpu memory
     // copy data to the device
     compute::copy(
@@ -44,7 +37,15 @@ int main()
         device_vector.begin(),
         queue
     );
-
+    
+    //initialise mutatedDNA
+    boost::compute::vector<std::complex<float> > vector;
+    //initialise leaderDNArender
+    boost::compute::vector<std::complex<float> > vector;
+    //initialise mutatedDNArender
+    boost::compute::vector<std::complex<float> > vector;
+    //initialise originalimage
+    boost::compute::vector<std::complex<float> > vector;
     
     while (fitness<desiredfitness)
     {
