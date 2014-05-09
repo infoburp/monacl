@@ -30,7 +30,6 @@ int main()
     compute::vector<float> device_vector(1000000, ctx);
 
     //initialise variables
-    //initialise leaderDNA
     //initialise mutatedDNA
     //initialise leaderDNArender
     //initialise mutatedDNArender
