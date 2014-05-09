@@ -29,6 +29,16 @@ int main()
     // create vector on the device
     compute::vector<float> device_vector(1000000, ctx);
 
+    //initialise variables
+    const size_t n = 1024 * 1024;
+    vex::Context ctx( vex::Filter::Any );
+    vex::vector<double> leaderDNA(ctx, n);
+    vex::vector<double> mutatedDNA(ctx, n);
+    vex::vector<double> leaderDNArender(ctx, n);
+    vex::vector<double> mutatedDNArender(ctx, n);
+    vex::vector<double> originalimage(ctx, n);
+
+
     //load image into gpu memory
     // copy data to the device
     compute::copy(
@@ -37,75 +47,66 @@ int main()
         device_vector.begin(),
         queue
     );
+
     
-    //initialise mutatedDNA
-    boost::compute::vector<std::complex<float> > vector;
-    //initialise leaderDNArender
-    boost::compute::vector<std::complex<float> > vector;
-    //initialise mutatedDNArender
-    boost::compute::vector<std::complex<float> > vector;
-    //initialise originalimage
-    boost::compute::vector<std::complex<float> > vector;
-    
-    while (fitness<desiredfitness)
+
+    //render dna
+    //for each shape in dna
     {
-        //render dna
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, gl_texture_);
 
-        //for each shape in dna
-        {
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, gl_texture_);
-
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0); glVertex2f(0, 0);
-        glTexCoord2f(0, 1); glVertex2f(0, h);
-        glTexCoord2f(1, 1); glVertex2f(w, h);
-        glTexCoord2f(1, 0); glVertex2f(w, 0);
-        glEnd();
-        }
-
-        //render leader dna
-        compute::renderDNA(
-            device_vector.begin(),
-            device_vector.end(),
-            queue
-        );
-
-        //mutate leader dna
-        compute::mutateDNA(
-            device_vector.begin(),
-            device_vector.end(),
-            queue
-        );
-
-        //render mutated dna
-        compute::renderDNA(
-            device_vector.begin(),
-            device_vector.end(),
-            queue
-        );
-
-        //compare mutated dna to leader dna
-        compute::compareDNA(
-            device_vector.begin(),
-            device_vector.end(),
-            queue
-        );
-
-        //if more fit, overwrite leader dna
-        if (renderDNA(mutatedDNA) > leaderDNAscore) 
-        {
-        //leaderDNA = mutatedDNA;
-        // copy data back to the host
-        compute::copy(
-            device_vector.begin(),
-            device_vector.end(),
-            host_vector.begin(),
-            queue
-        );
-        }
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex2f(0, 0);
+    glTexCoord2f(0, 1); glVertex2f(0, h);
+    glTexCoord2f(1, 1); glVertex2f(w, h);
+    glTexCoord2f(1, 0); glVertex2f(w, 0);
+    glEnd();
     }
 
+    //render leader dna
+    boost::compute::function<int (int)> renderDNA =
+    boost::compute::make_function_from_source<int (int)>(
+        "renderDNA",
+        "int renderDNA(int x) { return x + 4; }"
+    );
+
+    boost::compute::transform(vector.begin(), vector.end(), vector.begin(), renderDNA);
+
+    //mutate leader dna
+     boost::compute::function<int (int)> mutateDNA =
+    boost::compute::make_function_from_source<int (int)>(
+        "mutateDNA",
+        "int mutateDNA(int x) { return x + 4; }"
+    );
+
+    //render mutated dna
+     boost::compute::function<int (int)> renderDNA =
+    boost::compute::make_function_from_source<int (int)>(
+        "renderDNA",
+        "int renderDNA(int x) { return x + 4; }"
+    );
+
+    //compare mutated dna to leader dna
+     boost::compute::function<int (int)> compareDNA =
+    boost::compute::make_function_from_source<int (int)>(
+        "compareDNA",
+        "int compareDNA(int x) { return x + 4; }"
+    );
+
+    //if more fit, overwrite leader dna
+
+    if (renderDNA(mutatedDNA) > leaderDNAscore) 
+    {
+    leaderDNA = mutatedDNA;
+     // copy data back to the host
+    compute::copy(
+        device_vector.begin(),
+        device_vector.end(),
+        host_vector.begin(),
+        queue
+    );
+    }
    
 
     return 0;
